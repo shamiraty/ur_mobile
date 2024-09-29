@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% load custom_filters %}
+
+{% block css %} 
+<style>
+    .glowing-icon {
+        color: #0cb0e8;
+        animation: glowing 1.1s infinite;
+        padding: 0; /* No padding */
+    }
+    
+    @keyframes glowing {
+        0% {
+            filter: drop-shadow(0 0 5px #0cb0e8);
+        }
+        50% {
+            filter: drop-shadow(0 0 20px #0cb0e8);
+        }
+        100% {
+            filter: drop-shadow(0 0 5px #0cb0e8);
+        }
+    }
+</style>
+{% endblock %}
+{% load crispy_forms_tags %}
+<body>
+    <div class="container-fluid mt-2">
+        <div class="row justify-content-center">
+            <!-- Card 1: New User -->
+            <div class="col-md-6 mb-2">
+                <div class="card text-center shadow"style="border-radius:1px">
+                    <div class="card-header bg-light text-primary">
+                        <i class="fa fa-user-plus fa-2x text-info"></i>
+                        <h5 class="mt-2">NEW USER</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Register for URA Mobile</p>
+                        <a href="{% url 'create_person' %}" class="btn btn-light btn-sm w-100">Register Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Registered User -->
+            <div class="col-md-6 mb-4">
+                <div class="card text-center shadow"style="border-radius:1px">
+                    <div class="card-header bg-light text-primary">
+                        <i class="fa fa-check-circle fa-2x text-info glowing-icon"></i>
+                        <h5 class="mt-2">REGISTERED USER</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Request a new PIN or change your phone number</p>
+                        <a href="{% url 'create_person_reset' %}" class="btn btn-light btn-sm w-100 mb-2">
+                            <i class="fa fa-key"></i> Request New PIN
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% block js %}
+<!-- Add any custom JavaScript here if needed -->
+{% endblock %}
+{% endblock %}
+</body>
+</html>

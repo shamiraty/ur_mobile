@@ -1,0 +1,6 @@
+pip install django-import-export
+pip install django-rangefilter
+pip install django-axes
+pip install django-crispy-forms
+pip install crispy-bootstrap5
+pip install django-admin-menu

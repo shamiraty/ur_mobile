@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>{% block title %}Registration{% endblock %}</title>
+
+    <!-- Bootstrap and Custom Styles -->
+    <link href="{% static 'bootstrap/css/ajax_cloudfare.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap/css/fonts.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap/css/datatable.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap/css/bootstrap.min4.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap/css/ajax_jquery.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap/awesome/css/all.min.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap/awesome/css/fontawesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap/css/awaresome.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap/css/bootstrap_buttons.css' %}" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    {% block css %}
+    {% endblock %}
+
+    <style>
+        body {
+            padding-top: 4.5rem; /* Adjusted for navbar height */
+            font-family: 'Roboto', sans-serif;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 110px; /* Ensure footer doesn't overlap content */          
+            color: #333;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .navbar {
+           border-bottom:8px solid #ffc900;
+        }
+
+        .navbar-nav .nav-link {
+            margin-right: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #06e1dc !important; /* Hover color for links */
+        }
+
+        .dropdown-menu .dropdown-item:hover {
+            background-color: #ffc107;
+            color: #343a40 !important;
+        }
+
+        .text-primary {
+            color: #1e4294 !important;
+        }
+        
+        .bg-primary {
+            background-color: #053888 !important;
+            color: #fff !important;
+        }
+        .bg-light {
+            background-color: #e7effd !important;
+            
+        }
+        .badge-primary {
+            background-color: #287bb5 !important;
+            color: #fff !important;
+        }
+
+        .btn-primary {
+            background-color: #1e4294 !important;       
+            color: #fff !important;
+        }
+
+        .btn-primary:hover {
+            background-color: #145a8d !important;
+            border-color: #145a8d !important;
+        }
+
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #1b467b;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #145a8d;
+        }
+
+        /* Animation for the footer */
+        .footer {
+            animation: fadeInUp 0.5s ease-in-out;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Additional padding for mobile devices */
+        @media (max-width: 768px) {
+            .navbar-nav .nav-link {
+                margin-right: 0;
+                padding: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow-sm">
+    <div class="container-fluid">
+        <!-- Navbar brand -->
+        <a class="navbar-brand text-light fw-bold" href="{% url 'create_person' %}">
+           <!-- <small>URA-MOBILE</small>-->
+        </a>
+
+        <!-- Toggler button for mobile view -->
+        <button class="navbar-toggler text-warning bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon text-warning bg-primary"></span>
+        </button>
+
+        <!-- Collapsible content -->
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav ms-auto">
+                <!-- Home Link -->
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'welcome' %}">
+                        <i class="fa fa-home"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'create_person_reset' %}">
+                        <i class="fa fa-key"></i> PIN request
+                    </a>
+                </li>          
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'person_list' %}">
+                        <i class="fa fa-users"></i> New Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'person_list_reset' %}">
+                        <i class="fa fa-key"></i> Reset Users
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+
+            <!-- Authenticated User Links -->
+            {% if user.is_authenticated %}
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user-alt"></i> Welcome [ {{ user.username }} ]
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="{% url 'password_change' %}"><i class="fa fa-key"></i> Change Password</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fa fa-tachometer-alt"></i> Administration</a>
+                            <div class="dropdown-divider"></div>
+                            <form method="POST" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item"><i class="fa fa-sign-out"></i> Logout</button>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+
+
+    <!-- Main content area -->
+    <div class="container-fluid mt-2">
+        {% block content %}
+        {% endblock %}
+    </div>
+<!-- Fixed footer -->
+<footer class="fixed-bottom bg-light">
+    <div class="card-footer mt-2 text-center">
+        <small class="text-primary">Copyright &copy; 2024 Ura Saccos LTD Version 1.0.0</small>
+    </div>
+</footer>
+
+    <!-- Scripts -->
+    <script src="{% static 'bootstrap/js/sweetalert.js' %}"></script>
+    <script src="{% static 'bootstrap/js/jquery.js' %}"></script>
+    <script src="{% static 'bootstrap/js/jquery_ajax.js' %}"></script>
+    <script src="{% static 'bootstrap/js/jquery_datatable.js' %}"></script>
+    <script src="{% static 'bootstrap/js/datatable.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+    <script src="{% static 'bootstrap/js/datatable_ui.js' %}"></script>
+    <script src="{% static 'bootstrap/js/datatable_bootstrap.js' %}"></script>
+    <script src="{% static 'bootstrap/js/buttons.colVis.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap_buttons.js' %}"></script>
+    <script src="{% static 'bootstrap/js/datatable_zip.js' %}"></script>
+    <script src="{% static 'bootstrap/js/datatable_v2.js' %}"></script>
+    <script src="{% static 'bootstrap/js/datatable_copy.js' %}"></script>
+    <script src="{% static 'bootstrap/js/pdfmake/pdfmake.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/pdfmake/vfs_fonts.js' %}"></script>
+    {% block js %}
+    {% endblock %}
+</body>
+</html>

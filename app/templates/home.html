@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% load custom_filters %}
+{% block title %}{% endblock %}
+{% block css %} 
+
+{% endblock %}
+{% load crispy_forms_tags %}
+<body>
+    <div class="container-fluid mt-1">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card"style="border-radius:2px">
+                    <div class="card-header bg-light text-center text-primary">
+                            <h6> <i class="fa fa-users text-primary"></i> URA-MOBILE REGISTRATION</h6>
+                            </div>
+                    <div class="card-body">
+                        <div class="container mt-4">
+                            <form id="personForm" method="post" enctype="multipart/form-data" novalidate>
+                                {% csrf_token %}
+                                     
+                                
+                                <!-- Form fields -->
+                                {{ form|crispy }}
+                                
+                                <!-- Submit button and footer -->
+                                <div class="mt-4 text-center">
+                                    <button type="submit" class="btn btn-primary btn-sm w-100 mb-2" id="submitBtn"style="border-radius:2px">Register</button>
+                                    <small>If you have forgotten your PIN or need to change your phone number, click <strong>PIN Request.</strong></small>
+                                    <a href="{% url 'create_person_reset' %}" class="btn btn-outline-secondary btn-sm w-100 mt-2">
+                                        PIN Request
+                                    </a>
+                                </div>                          
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% block js %}
+    {% if messages %}
+    <script type="text/javascript">
+        {% for message in messages %}
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ message }}',
+                position: 'center',
+                toast: false,  <!-- Set to false for a dialog instead of a toast -->
+                showConfirmButton: false,
+                timer: 10000,
+                timerProgressBar: true,
+                background: '#f0f9ff',  <!-- Light blue background color -->
+                color: '#0d69a0',  <!-- Text color for better contrast -->
+                customClass: {
+                    popup: 'swal2-border-radius',  <!-- Custom styling for border radius -->
+                    title: 'swal2-title',
+                    content: 'swal2-content',
+                },
+                padding: '2rem',
+                didOpen: (popup) => {
+                    popup.style.border = '0px solid #2196F3';  <!-- Blue border around the popup -->
+                },
+            });
+        {% endfor %}
+    </script>   
+{% endif %}
+
+<script>
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        // Simply submit the form when the button is clicked
+        document.getElementById('personForm').submit();
+    });
+</script>
+{% endblock %}
+{% endblock %}
+</body>
+</html>
