@@ -23,12 +23,14 @@ urlpatterns = [
     path('', include("app.urls")),
     path('change-password/', auth_views.PasswordChangeView.as_view(), name='password_change'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
+
+    
 ]
 from django.contrib import admin
 
-admin.site.site_header = "ADMINISTRATION"
-admin.site.index_title = "ADMINISTRATION"
-admin.site.site_title = "ADMINISTRATION"
+admin.site.site_header = "URA-MOBILE"
+admin.site.index_title = "URA-MOBILE"
+admin.site.site_title = "AURA-MOBILE"
 
 from django.conf import settings
 from django.conf.urls.static import static

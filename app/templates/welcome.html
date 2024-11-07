@@ -29,24 +29,24 @@
     <div class="container-fluid mt-2">
         <div class="row justify-content-center">
             <!-- Card 1: New User -->
-            <div class="col-md-6 mb-2">
+            <div class="col-md-4 mb-2">
                 <div class="card text-center shadow"style="border-radius:1px">
                     <div class="card-header bg-light text-primary">
-                        <i class="fa fa-user-plus fa-2x text-info"></i>
+                        <i class="fa fa-user-plus fa-2x text-primary"></i>
                         <h5 class="mt-2">NEW USER</h5>
                     </div>
                     <div class="card-body">
                         <p class="card-text">Register for URA Mobile</p>
-                        <a href="{% url 'create_person' %}" class="btn btn-light btn-sm w-100">Register Now</a>
+                        <a href="{% url 'create_person' %}" class="btn btn-light btn-sm w-100"><i class="fa fa-plus"></i> Register Now</a>
                     </div>
                 </div>
             </div>
 
             <!-- Card 2: Registered User -->
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-2">
                 <div class="card text-center shadow"style="border-radius:1px">
                     <div class="card-header bg-light text-primary">
-                        <i class="fa fa-check-circle fa-2x text-info glowing-icon"></i>
+                        <i class="fa fa-check-circle fa-2x text-primary glowing-icon"></i>
                         <h5 class="mt-2">REGISTERED USER</h5>
                     </div>
                     <div class="card-body">
@@ -57,6 +57,36 @@
                     </div>
                 </div>
             </div>
+
+ <!-- Card 2: Registered User -->
+<div class="col-md-4 mb-2">
+    <div class="card text-center shadow" style="border-radius: 1px;">
+        <div class="card-header bg-light text-primary">
+            <i class="fa fa-file-pdf fa-2x text-primary"></i>
+            <h5 class="mt-2">URA MOBILE FORM</h5>
+        </div>
+        <div class="card-body">
+            <a href="static/img/ura_form.pdf" target="_blank" class="btn btn-light btn-sm w-100 mb-2">
+                <i class="fa fa-download"></i> Download Form
+            </a>
+            
+            <div style="text-align: left;"> <!-- Ensure text is left-aligned -->
+                <ol>
+                    <li><small>Download the form.</small></li>
+                    <li><small>Fill out the form.</small></li>
+                    <li><small>Capture the form using the phone camera.</small></li>
+                    <li><small>Ensure the image is clear.</small></li>
+                    <li><small>Make sure the image size is less than 3 MB.</small></li>
+                </ol>
+            </div>        
+        </div>
+    </div>
+</div>
+
+
+
+
+
         </div>
     </div>
 

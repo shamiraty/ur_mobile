@@ -52,17 +52,37 @@
         <!-- Date Range Filter Form -->
         <form method="get" class="mb-4">
             <div class="form-row">
+                <!-- Date Range Inputs -->
                 <div class="col-md-12 mb-3">
-                    <label for="startDate" class="form-label">Select Date Range:</label>
+                    <label for="startDate" class="form-label text-light">Select Date Range:</label>
                     <div class="input-group">
                         <input type="date" id="startDate" name="start_date" class="form-control" value="{{ start_date }}">
-                        <div class="input-group-append mx-2">to</div>
+                        <div class="input-group-append mx-2 text-light">to</div>
                         <input type="date" id="endDate" name="end_date" class="form-control" value="{{ end_date }}">
                         <button type="submit" class="btn btn-light form-control">Apply Filter</button>
                     </div>
                 </div>
+        
+                <div class="col-md-12 mb-3">
+                    <label for="status" class="form-label text-light">Filter by Status:</label>
+                    <div class="form-group d-flex align-items-center">
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" id="status_true" name="status_true" class="form-check-input p-2" {% if 'status_true' in request.GET %}checked{% endif %}>
+                            <label for="status_true" class="form-check-label text-light">Registered</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" id="status_false" name="status_false" checked class="form-check-input p-2" {% if 'status_false' in request.GET %}checked{% endif %}>
+                            <label for="status_false" class="form-check-label text-light">Unregistered</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" id="status_all" name="status_all" class="form-check-input p-2" {% if 'status_all' in request.GET %}checked{% endif %}>
+                            <label for="status_all" class="form-check-label text-light">All</label>
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>
+        
         
 
         <ul class="list-group w-100">
@@ -71,16 +91,31 @@
                 Total Records: <strong>{{ total_count }}</strong>
             </li>
             <li class="list-group-item ">
-                <i class="fa fa-check-circle text-success {% if true_count > 0 %}glowing-icon{% endif %}"></i>
+                <i class="fa fa-check-circle  {% if true_count > 0 %}glowing-icon{% endif %}"></i>
                 Registered Users: <strong>{{ true_count }}</strong>
             </li>
             <li class="list-group-item ">
-                <i class="fa fa-times-circle text-danger"></i>
+                <i class="fa fa-times-circle "></i>
                 Unregistered Users: <strong>{{ false_count }}</strong>
             </li>
         </ul>
 
+
         
+      <!-- Loading Progress Dialog -->
+<div class="modal fade" id="loadingModal" tabindex="-1" aria-labelledby="loadingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <h5 id="loadingModalLabel">Loading Data...</h5>
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+          
         <div class="card mt-2">
             <div class="card-body">
         <div class="table-responsive mt-4">
@@ -92,7 +127,7 @@
                         <th>F-Name</th>
                         <th>M-Name</th>
                         <th>L-Name</th>
-                        <th>Department</th>
+                        <th>Added by</th>
                         <th>File</th>
                         <th>Official mail</th>
                         <th>Phone</th>
@@ -107,11 +142,17 @@
                             <td>{{ item.fname }}</td>
                             <td>{{ item.mname }}</td>
                             <td>{{ item.lname }}</td>
-                            <td>{{ item.department }}</td>
+                            <td>
+                                <a href="{% url 'employee_detail' item.username %}" class="text-decoration-none">
+                                    {{ item.username }}
+                                </a>
+                            </td>
+                            
                             <td>
                                 {% if item.image %}
-                                    <a href="{{ item.image.url }}" download>
-                                        <i class="fa fa-download text-primary"></i> 
+                                    <a href="#" class="image-popup" data-image-url="{{ item.image.url }}"
+                                       data-user-name="{{ item.fname }} {{ item.mname }} {{ item.lname }}">
+                                        <i class="fa fa-download text-primary"></i>
                                     </a>
                                 {% else %}
                                     No File
@@ -139,6 +180,28 @@
     </div>
 </body>
 </html>
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h6 class="modal-title text-uppercase text-primary" id="imageModalLabel"></h6>
+            </div>
+            <div class="modal-body text-center">
+                <!-- Spinner to show while the image is loading -->
+                <div id="loadingSpinner" class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                
+                <!-- Image that will be shown once loaded -->
+                <img id="modalImage" src="" alt="Image Preview" class="img-thumbnail d-none" />
+            </div>
+            <div class="modal-footer">
+                <a id="downloadLink" href="" download class="btn btn-primary btn-sm">Download</a>    
+            </div>
+        </div>
+    </div>
+</div>
 {% block js %}
 <script>
     $(document).ready(function() {
@@ -166,6 +229,51 @@
             ordering: true,
             info: true,
             pageLength: 10
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        // Show the loading modal before AJAX request
+        $(document).on('submit', 'form', function() {
+            $('#loadingModal').modal('show');
+        });
+
+        // Hide the loading modal after data is loaded
+        $(window).on('load', function() {
+            $('#loadingModal').modal('hide');
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        // Use event delegation on the parent element of .image-popup
+        $('table').on('click', '.image-popup', function(event) {
+            event.preventDefault();
+            var imageUrl = $(this).data('image-url');
+            var userName = $(this).data('user-name'); // Get user name from data attribute
+            
+            // Show the spinner and hide the image initially
+            $('#loadingSpinner').removeClass('d-none');
+            $('#modalImage').addClass('d-none');
+            
+            // Update modal title with user details
+            $('#imageModalLabel').text(userName); // Set the title with user details
+
+            // Set the image source
+            $('#modalImage').attr('src', imageUrl);
+            
+            // Show the modal
+            $('#imageModal').modal('show');
+            
+            // When the image is fully loaded, hide the spinner and show the image
+            $('#modalImage').on('load', function() {
+                $('#loadingSpinner').addClass('d-none'); // Hide the spinner
+                $('#modalImage').removeClass('d-none');  // Show the image
+            });
+
+            // Set the download link
+            $('#downloadLink').attr('href', imageUrl);
         });
     });
 </script>

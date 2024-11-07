@@ -4,3 +4,30 @@ pip install django-axes
 pip install django-crispy-forms
 pip install crispy-bootstrap5
 pip install django-admin-menu
+pip install django-crispy-forms django-ckeditor
+
+
+AI  linux
+sudo apt update
+sudo apt install tesseract-ocr
+sudo apt install python3-opencv
+pip install pillow
+pip install pytesseract
+tesseract --version
+pip install requests
+pip install ocrmypdf  (for validate pdf)
+
+
+
+   {% if user.is_authenticated and user.is_superuser %}
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'person_list' %}">
+                        <i class="fa fa-users"></i> New Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'person_list_reset' %}">
+                        <i class="fa fa-key"></i> PIN Reset Users
+                    </a>
+                </li>
+           {% endif %}

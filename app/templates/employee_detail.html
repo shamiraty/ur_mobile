@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}Employee Details{% endblock %}
+
+{% block css %}
+<style>
+    .list-group-item {
+        font-size: 16px;
+    }
+    .list-group-item strong {
+        width: 150px;
+        display: inline-block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h6 class="text-light">Employee Details: {{ employee.user.username }}</h6>
+    <div class="card mt-3">
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <strong>Full Name:</strong> {{ employee.user.first_name }} {{ employee.user.last_name }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Username:</strong> {{ employee.user.username }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Role:</strong> {{ employee.role }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Force Number:</strong> {{ employee.force_number }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Rank:</strong> {{ employee.rank }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Phone:</strong> {{ employee.phone }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Email:</strong> {{ employee.email }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Post:</strong> {{ employee.post }}
+                </li>
+                <li class="list-group-item">
+                    <strong>District:</strong> {{ employee.district }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Branch:</strong> {{ employee.district.branch }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Registered Date:</strong> {{ employee.registered_date|date:"F j, Y" }}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

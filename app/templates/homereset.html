@@ -28,6 +28,65 @@
                                     <button type="submit" class="btn btn-primary btn-sm w-100" id="submitBtn"style="border-radius:2px">Reset</button>
                                 </div>                             
                             </form>
+                             <!-- CSS Styles for Loading Overlay (SweetAlert2 takes care of the overlay) -->
+                             <style>
+                                body {
+                                    overflow: hidden; /* Disable scroll while loading */
+                                }
+                            </style>
+                    
+                            <!-- Form Submission Script -->
+                            <script>
+                                document.getElementById('personForm').addEventListener('submit', function(e) {
+                                    e.preventDefault(); // Prevent the form from submitting immediately
+                    
+                                    // Disable the entire page interaction
+                                    document.body.style.pointerEvents = 'none'; // Disable page interactions
+                                    
+                                    // Show SweetAlert loading dialog with custom message
+                                    Swal.fire({
+                                        title: 'Checking Image Contents...',
+                                        text: 'Please wait while we verify the uploaded image contents',
+                                        allowOutsideClick: false,  // Disable closing the dialog by clicking outside
+                                        allowEscapeKey: false,    // Disable closing by pressing Escape key
+                                        showCancelButton: false,  // Disable the Cancel button
+                                        showConfirmButton: false, // Disable the Confirm button
+                                        didOpen: () => {
+                                            Swal.showLoading();
+                                        },
+                                        customClass: {
+                                            popup: 'loading-popup', // Custom class for the popup
+                                            content: 'loading-content', // Custom class for the content
+                                        }
+                                    });
+                    
+                                    // Simulate a delay (replace this with actual image processing request)
+                                    setTimeout(() => {
+                                        // Re-enable the page interaction after processing
+                                        document.body.style.pointerEvents = 'auto'; // Re-enable page interactions
+                    
+                                        // If you are submitting the form using AJAX, trigger submission here
+                                        // e.target.submit();  // Uncomment this line to submit the form
+                                    }, 5000); // Adjust the delay to match your actual processing time
+                                });
+                            </script>
+                    
+                            <!-- Custom Styles for SweetAlert Loading Dialog -->
+                            <style>
+                                /* Customize the SweetAlert loading dialog */
+                                .loading-popup {
+                                    background-color: rgba(0, 0, 0, 0.8) !important; /* Dark background */
+                                    color: white !important; /* White text */
+                                    border-radius: 15px !important; /* Rounded corners */
+                                    padding: 25px !important; /* More padding for better look */
+                                }
+                    
+                                .loading-content {
+                                    font-size: 1.25rem !important; /* Larger text for clarity */
+                                    text-align: center; /* Centered text */
+                                    padding-top: 10px;
+                                }
+                            </style>
                         </div>
                     </div>
                 </div>
@@ -35,6 +94,12 @@
         </div>
 
     {% block js %}
+    <script>
+        document.getElementById('personForm').onsubmit = function() {
+            // Show the loading overlay
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        };
+    </script>
     {% if messages %}
     <script type="text/javascript">
         {% for message in messages %}

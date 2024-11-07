@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>{% block title %}Registration{% endblock %}</title>
@@ -11,7 +11,7 @@
     <link href="{% static 'bootstrap/css/ajax_cloudfare.css' %}" rel="stylesheet">
     <link href="{% static 'bootstrap/css/fonts.css' %}" rel="stylesheet">
     <link href="{% static 'bootstrap/css/datatable.css' %}" rel="stylesheet">
-    <link href="{% static 'bootstrap/css/bootstrap.min4.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap/css/theme4.css' %}" rel="stylesheet">
     <link href="{% static 'bootstrap/css/ajax_jquery.css' %}" rel="stylesheet">
     <link href="{% static 'bootstrap/awesome/css/all.min.css' %}" rel="stylesheet">
     <link href="{% static 'bootstrap/awesome/css/fontawesome.min.css' %}" rel="stylesheet">
@@ -21,6 +21,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+   
+   
+   <!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     {% block css %}
     {% endblock %}
 
@@ -28,10 +36,14 @@
         body {
             padding-top: 4.5rem; /* Adjusted for navbar height */
             font-family: 'Roboto', sans-serif;
-            font-size: 18px;
+            font-size: 20px;
             line-height: 1.6;
-            margin-bottom: 110px; /* Ensure footer doesn't overlap content */          
+            margin-bottom: 110px; /* Ensure footer doesn't overlap content */
             color: #333;
+        }
+
+         .fixed-bottom{
+        border-top:2px solid #ffc900;
         }
 
         .footer {
@@ -49,17 +61,22 @@
             font-weight: bold;
         }
         .navbar {
-           border-bottom:8px solid #ffc900;
+           border-bottom:8px solid #0565a5;
         }
 
         .navbar-nav .nav-link {
             margin-right: 20px;
-            transition: color 0.3s ease;
+            transition: color 0.3s ease-in-out; /* Smooth transition effect */
+             
+            
         }
 
         .navbar-nav .nav-link:hover {
-            color: #06e1dc !important; /* Hover color for links */
+            color: #f2f4f6 !important; /* Hover color for links */
+            border-radius: 2px;
+            background-color: rgba(6, 225, 220, 0.3); /* Light background color on hover */
         }
+        
 
         .dropdown-menu .dropdown-item:hover {
             background-color: #ffc107;
@@ -67,29 +84,29 @@
         }
 
         .text-primary {
-            color: #1e4294 !important;
+            color: #0078c6 !important;
         }
-        
+
         .bg-primary {
-            background-color: #053888 !important;
+            background-color: #0565a5 !important;
             color: #fff !important;
         }
         .bg-light {
             background-color: #e7effd !important;
-            
+
         }
         .badge-primary {
-            background-color: #287bb5 !important;
+            background-color: #0565a5 !important;
             color: #fff !important;
         }
 
         .btn-primary {
-            background-color: #1e4294 !important;       
-            color: #fff !important;
+            background-color: #0565a5 !important;
+             
         }
 
         .btn-primary:hover {
-            background-color: #145a8d !important;
+            background-color: #0565a5 !important;
             border-color: #145a8d !important;
         }
 
@@ -135,21 +152,21 @@
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
     <div class="container-fluid">
         <!-- Navbar brand -->
         <a class="navbar-brand text-light fw-bold" href="{% url 'create_person' %}">
-           <!-- <small>URA-MOBILE</small>-->
+            <!-- <small>URA-MOBILE</small> -->
         </a>
-
         <!-- Toggler button for mobile view -->
-        <button class="navbar-toggler text-warning bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon text-warning bg-primary"></span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
         </button>
 
         <!-- Collapsible content -->
-        <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav ms-auto">
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <!-- Left-aligned links -->
+            <ul class="navbar-nav me-auto">
                 <!-- Home Link -->
                 <li class="nav-item">
                     <a class="nav-link text-light" href="{% url 'welcome' %}">
@@ -157,11 +174,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="{% url 'create_person_reset' %}">
-                        <i class="fa fa-key"></i> PIN request
+                    <a class="nav-link text-light" href="{% url 'contact' %}">
+                        <i class="fa fa-envelope"></i> Support
                     </a>
-                </li>          
-                {% if user.is_authenticated %}
+                </li>
+                
+             
                 <li class="nav-item">
                     <a class="nav-link text-light" href="{% url 'person_list' %}">
                         <i class="fa fa-users"></i> New Users
@@ -169,40 +187,84 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-light" href="{% url 'person_list_reset' %}">
-                        <i class="fa fa-key"></i> Reset Users
+                        <i class="fa fa-key"></i> PIN Reset Users
                     </a>
                 </li>
-                {% endif %}
+          
+            
             </ul>
 
-            <!-- Authenticated User Links -->
+            <!-- Right-aligned user links for authenticated users -->
+            <!-- Right-aligned user links for authenticated users -->
             {% if user.is_authenticated %}
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-user-alt"></i> Welcome [ {{ user.username }} ]
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="{% url 'password_change' %}"><i class="fa fa-key"></i> Change Password</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fa fa-tachometer-alt"></i> Administration</a>
-                            <div class="dropdown-divider"></div>
-                            <form method="POST" action="{% url 'logout' %}">
-                                {% csrf_token %}
-                                <button type="submit" class="dropdown-item"><i class="fa fa-sign-out"></i> Logout</button>
-                            </form>
-                        </div>
-                    </li>
-                </ul>
-            {% endif %}
+            <!-- Right-aligned user links for authenticated users -->
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-light" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-user-alt"></i> Welcome, {{ user.username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'password_change' %}">
+                                <i class="fa fa-key"></i> Change Password
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        
+                        <!-- Superuser/Admin: Link to Admin Dashboard -->
+                        {% if user.is_superuser %}
+                            <li>
+                                <a class="dropdown-item" href="{% url 'admin:index' %}">
+                                    <i class="fa fa-tachometer-alt"></i> Administration
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        <!-- Staff: No admin link, just logout -->
+                        {% if user.is_staff %}
+                            <li>
+                                <form method="POST" action="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="fa fa-sign-out"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        {% endif %}
+                        
+                        <!-- Default: General Logout Option -->
+                        {% if not user.is_superuser and not user.is_staff %}
+                            <li>
+                                <form method="POST" action="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="fa fa-sign-out"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </li>
+            </ul>
+        {% else %}
+            <!-- If user is not authenticated, show login link -->
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'admin:index' %}">
+                        <i class="fa fa-sign-in-alt"></i> Login
+                    </a>
+                </li>
+            </ul>
+        {% endif %}
+        
+
         </div>
     </div>
 </nav>
 
 
-
     <!-- Main content area -->
-    <div class="container-fluid mt-2">
+    <div class="container-fluid mt-3">
         {% block content %}
         {% endblock %}
     </div>
